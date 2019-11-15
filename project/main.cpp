@@ -1,6 +1,6 @@
 #include <sc2api/sc2_api.h>
 #include <iostream>
-#include "Bot.h"
+#include "bot_master.h"
 
 using namespace sc2;
 
@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
 	Coordinator coordinator;
 	coordinator.LoadSettings(argc, argv);
 
-	Bot bot;
+	bot_master bot;
 	coordinator.SetParticipants({
 		CreateParticipant(Race::Protoss, &bot),
 		CreateComputer(Race::Zerg)
