@@ -60,6 +60,16 @@ void bot_master::OnBuildingConstructionComplete(const sc2::Unit *unit) {
 		case UNIT_TYPEID::PROTOSS_FORGE: {
 			forge_completed = true; break;
 		}
+		case UNIT_TYPEID::PROTOSS_ASSIMILATOR: {
+			// select two random probes and send them to extract the newly 
+			// created assimilator
+			for (int i = 0; i < 2; ++i) {
+				const Unit *set_worker = random_probe();
+				Actions()->UnitCommand(set_worker, ABILITY_ID::SMART, unit);
+				gas_workers.insert(set_worker); // add it to the set so it is 
+												// not selected for other task
+			}
+		}
 	}
 }
 
@@ -67,13 +77,14 @@ void bot_master::OnUnitIdle(const Unit *unit) {
 	switch (unit->unit_type.ToType()) {
 		case UNIT_TYPEID::PROTOSS_NEXUS: {
 			// build up to 21 workers. three scouts and 18 miners
-			if (observation->GetFoodWorkers() < 21) {
+			if (observation->GetFoodWorkers() < 23) {
 				Actions()->UnitCommand(unit, ABILITY_ID::TRAIN_PROBE);
 			}
 			break;
 		}
 		case UNIT_TYPEID::PROTOSS_PROBE: {
 			if (is_scout(unit)) {
+				std::cout << "keep exploring" << std::endl;
 				// if not seen the opponent's start location then check 
 				// the next potential location 
 				if (scout_location < 3) {
@@ -94,6 +105,33 @@ void bot_master::OnUnitIdle(const Unit *unit) {
 			break;
 		}
 	}
+}
+
+const Unit * bot_master::random_probe() {
+    const Unit *unit_selected = nullptr;
+
+	Units units = observation->GetUnits(Unit::Alliance::Self);
+
+	// get random probe that has no orther other than mine
+	// ability_id for mining and bringing resources is 3666 and 3667
+	for (const auto &unit : units) {
+		// if probe, not a scout, not a gas worker and no orders then select this unit 
+		if (unit->unit_type == UNIT_TYPEID::PROTOSS_PROBE &&
+			!is_scout(unit) && gas_workers.find(unit) == gas_workers.end()) {
+			for (auto &order : unit->orders) {
+				// std::cout << order.ability_id << std::endl;
+				if (order.ability_id != 3666 && order.ability_id != 3667) {
+					// this means the probe is doing something other than 
+					// mining so do not select it
+					break;
+				} else {
+					unit_selected = unit;
+				}
+			}
+		} 
+	}
+
+    return unit_selected;
 }
 
 size_t bot_master::CountUnitType(UNIT_TYPEID unit_type) {

@@ -3,6 +3,7 @@
 #include <sc2api/sc2_api.h>
 #include <iostream>
 #include <vector>
+#include <set>
 
 using namespace sc2;
 
@@ -34,18 +35,21 @@ private:
 	// send a worker to scout given location
 	void scout(Point2D location);
 
+	// returns a random probe that is not a scout 
+	const Unit * random_probe();
+
 	// builds the given type of structure in the given coordinates
 	// it checks pre-requisites such as mineral/vespene cost, required buildings
 	// and proximity to a pylon depending on the building
 	bool build(ABILITY_ID ability_type_for_structure, Point2D location);
 
+	// build helper that determines location of neares vespene geyser and tries 
+	// to build an assimilator on it
+	bool build_vespene_geyser(const Unit *unit_to_build);
+
 	// build helper that determines if the building to construct is near an 
 	// existing pylon (pre-requisite)
 	bool is_near_pylon(Point2D location);
-
-	// build helper that retrieves random probe (that is not the scout) to be 
-	// assigned the construction of a building
-	const Unit * random_probe();
 
 	// copied from tutorial https://blizzard.github.io/s2client-api/
 	// return number of units/buildings of given type
@@ -80,6 +84,9 @@ private:
 	// locations of where the buildings are going to be placed
 	std::vector<Point2D> build_placement; 
 
+	// set containing the probes working on assimilators
+	std::set<const Unit*> gas_workers; 
+
 	// list of location of existing pylons (need to know since we have to place 
 	// buildings near pylons)
 	std::vector<Point2D> pylons;
@@ -88,7 +95,8 @@ private:
 	std::vector<Point2D> opp_location; // opponent's potential start locations
 	Point2D opp_base;                  // opponent's start location
 
-	const Unit* scout_unit; // contains probe scout
+	const Unit *scout_unit; // contains probe scout
+	const Unit *builder_unit; 
 
 	int index;            // index of build order and location
 	int scout_location;   // counter for number of locations scouted 
