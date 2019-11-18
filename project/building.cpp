@@ -38,8 +38,9 @@ bool bot_master::build(ABILITY_ID ability_type_for_structure, Point2D location) 
         }
         case ABILITY_ID::BUILD_PHOTONCANNON: {
             // requirements: 150 minerals / forge / near a pylon
-            if (minerals < 150 || !forge_completed || !is_near_pylon(location)
-                || !Query()->Placement(ABILITY_ID::BUILD_PHOTONCANNON, location)) {
+            if (minerals < 150 ||  !is_near_pylon(location)
+                || !Query()->Placement(ABILITY_ID::BUILD_PHOTONCANNON, location)
+                || !forge_completed) {
                 return false;
             }
             break;
@@ -51,17 +52,59 @@ bool bot_master::build(ABILITY_ID ability_type_for_structure, Point2D location) 
             }
             if (build_vespene_geyser(unit_to_build)) {
                 gas_workers.insert(unit_to_build); // add it as assimilator worker 
+                break;
             } else {
                 return false;
             }
         }
+        case ABILITY_ID::BUILD_GATEWAY: {
+            // requirements: 150 minerals / near pylon
+            if (minerals < 150 || !is_near_pylon(location) 
+                || !Query()->Placement(ABILITY_ID::BUILD_GATEWAY, location)) {
+                return false;
+            }
+            break;
+        }
+        case ABILITY_ID::BUILD_CYBERNETICSCORE: {
+            // requirements: 150 / gateway / near pylon
+            if (minerals < 150 || !is_near_pylon(location) 
+                || !Query()->Placement(ABILITY_ID::BUILD_CYBERNETICSCORE, location)
+                || !gateway_completed) {
+                return false;
+            }
+            break;
+        }
+        case ABILITY_ID::BUILD_ROBOTICSFACILITY: {
+            // requirements: 150 minerals 100 vespene / core / near pylon
+            if (minerals < 150 || vespene < 100 || !is_near_pylon(location)
+                || !Query()->Placement(ABILITY_ID::BUILD_ROBOTICSFACILITY, location)
+                || !core_completed) {
+                return false;
+            }
+            break;
+        }
+        case ABILITY_ID::BUILD_TWILIGHTCOUNCIL: {
+            // requirements: 150 minerals 100 vespene / core / near pylon
+            if (minerals < 150 || vespene < 100 || !is_near_pylon(location)
+                || !Query()->Placement(ABILITY_ID::BUILD_TWILIGHTCOUNCIL, location)
+                || !core_completed) {
+                return false;
+            }
+            break;
+        }
+        case ABILITY_ID::BUILD_DARKSHRINE: {
+            // requirements: 150 minerals 150 vespene / twilight / near pylon
+            if (minerals < 150 || vespene < 150 || !is_near_pylon(location)
+                || !Query()->Placement(ABILITY_ID::BUILD_DARKSHRINE, location)
+                || !twilight_completed) {
+                return false;
+            }
+            break;
+        }
+        return false; // no other building is supported at this time
     }
 
 	Actions()->UnitCommand(unit_to_build, ability_type_for_structure, location);
-    for (const auto& order : unit_to_build->orders) {
-		std::cout << "probe: " << unit_to_build << " order: " << order.ability_id.to_string() << std::endl;
-	}
-    std::cout << "end\n";
 
 	return true;
 }

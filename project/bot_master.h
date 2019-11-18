@@ -104,4 +104,7 @@ private:
 	bool opp_base_found;
 	bool pylon_completed;
 	bool forge_completed;
+	bool gateway_completed;
+	bool core_completed;
+	bool twilight_completed;
 };

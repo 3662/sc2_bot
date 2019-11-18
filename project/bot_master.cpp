@@ -69,6 +69,16 @@ void bot_master::OnBuildingConstructionComplete(const sc2::Unit *unit) {
 				gas_workers.insert(set_worker); // add it to the set so it is 
 												// not selected for other task
 			}
+			break;
+		}
+		case UNIT_TYPEID::PROTOSS_GATEWAY: {
+			gateway_completed = true; break;
+		}
+		case UNIT_TYPEID::PROTOSS_CYBERNETICSCORE: {
+			core_completed = true; break;
+		}
+		case UNIT_TYPEID::PROTOSS_TWILIGHTCOUNCIL: {
+			twilight_completed = true; break;
 		}
 	}
 }
