@@ -1,4 +1,4 @@
-## Do not modify the code (I will finish it this weekend)
+## Do not modify the code 
 
 ## Before running the code:
 ```
@@ -25,17 +25,16 @@ This is really effective if our opponent do not have some form of detection.
 
 ## Work so far:
 ```
-Set position for bouldings that can handle all possible starting locations
-Scout and determine opponent's starting location
-Block entrance with Forge, Pylons and Cannons
-Cannons protecting the mineral line
+scout
+vespene gas extraction
+all tech and buildings are set to be build in any starting location
 ```
 
 ## TO-DOs:
 ```
-Organize the code in more files
-Build Gateways 
-Build the tech (Twilight Council, Dark Shrine and Cybernetics Core)
-Create and send the Warp Prism
-Warp Dark Templars and attack
+optimize build order 
+expand (?)
+research Warp Gate
+buld and send a Warp Prism to our opponent's base
+warp in Dark Templars and attack
 ```
