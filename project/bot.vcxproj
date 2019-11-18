@@ -129,7 +129,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bot_master.cpp" />
+    <ClCompile Include="building.cpp" />
+    <ClCompile Include="init.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="scouting.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="bot_master.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
