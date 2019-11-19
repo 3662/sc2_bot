@@ -101,6 +101,16 @@ bool bot_master::build(ABILITY_ID ability_type_for_structure, Point2D location) 
             }
             break;
         }
+		case ABILITY_ID::RESEARCH_WARPGATE: {
+			std::cout << "wrapgate\n";
+			if (minerals < 50 || vespene < 50 || !forge_completed || !gateway_completed|| !core_completed) {
+				std::cout << "false\n";
+				return false;
+			}
+			Actions()->UnitCommand(sybernetiscore, ability_type_for_structure);
+			return true;
+		}
+		default:
         return false; // no other building is supported at this time
     }
 
@@ -108,6 +118,7 @@ bool bot_master::build(ABILITY_ID ability_type_for_structure, Point2D location) 
 
 	return true;
 }
+
 
 bool bot_master::build_vespene_geyser(const Unit *unit_to_build) {
     Units units = observation->GetUnits(Unit::Alliance::Neutral);

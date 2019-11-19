@@ -24,6 +24,8 @@ public:
 
 	virtual void OnBuildingConstructionComplete(const sc2::Unit *unit) final;
 
+	
+
 private:
 
 	// manages idle units - "unit" parameter is the unit detected to be iddle
@@ -42,6 +44,7 @@ private:
 	// it checks pre-requisites such as mineral/vespene cost, required buildings
 	// and proximity to a pylon depending on the building
 	bool build(ABILITY_ID ability_type_for_structure, Point2D location);
+
 
 	// build helper that determines location of neares vespene geyser and tries 
 	// to build an assimilator on it
@@ -107,4 +110,5 @@ private:
 	bool gateway_completed;
 	bool core_completed;
 	bool twilight_completed;
+	const Unit *sybernetiscore;
 };

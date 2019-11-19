@@ -58,7 +58,8 @@ void bot_master::OnBuildingConstructionComplete(const sc2::Unit *unit) {
 			break;
 		}
 		case UNIT_TYPEID::PROTOSS_FORGE: {
-			forge_completed = true; break;
+			forge_completed = true;
+			break;
 		}
 		case UNIT_TYPEID::PROTOSS_ASSIMILATOR: {
 			// select two random probes and send them to extract the newly 
@@ -75,7 +76,10 @@ void bot_master::OnBuildingConstructionComplete(const sc2::Unit *unit) {
 			gateway_completed = true; break;
 		}
 		case UNIT_TYPEID::PROTOSS_CYBERNETICSCORE: {
-			core_completed = true; break;
+			core_completed = true;
+			sybernetiscore = unit;
+			build(ABILITY_ID::RESEARCH_WARPGATE, Point2D(0, 0));
+			break;
 		}
 		case UNIT_TYPEID::PROTOSS_TWILIGHTCOUNCIL: {
 			twilight_completed = true; break;
