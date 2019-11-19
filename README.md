@@ -28,13 +28,13 @@ This is really effective if our opponent do not have some form of detection.
 scout
 vespene gas extraction
 all tech and buildings are set to be build in any starting location
+research Warp Gate
 ```
 
 ## TO-DOs:
 ```
 optimize build order 
 expand (?)
-research Warp Gate
 buld and send a Warp Prism to our opponent's base
 warp in Dark Templars and attack
 ```
