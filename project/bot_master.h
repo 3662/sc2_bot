@@ -19,14 +19,15 @@ public:
 	// specifies what to do each step on game
 	virtual void OnStep() final;
 
-	// called when enemy unit enters vision 
-	virtual void OnUnitEnterVision(const sc2::Unit *unit) final;
-
-	virtual void OnBuildingConstructionComplete(const sc2::Unit *unit) final;
-
-	
-
 private:
+
+	// called when enemy unit enters vision 
+	virtual void OnUnitEnterVision(const Unit *unit) final;
+
+	// determines when buildings are completed 
+	// useful to set the building completed booleans that are used to know
+	// if we have the requirements for more advanced buildings
+	virtual void OnBuildingConstructionComplete(const sc2::Unit *unit) final;
 
 	// manages idle units - "unit" parameter is the unit detected to be iddle
 	// send probes back to mining
@@ -34,8 +35,27 @@ private:
 	// workers cap is 18
 	virtual void OnUnitIdle(const Unit *unit) final;
 
+	// used to retrieve units or buildings that have been destoryed
+	virtual void OnUnitDestroyed(const Unit *unit) final;
+
+	// register when a unit has been created 
+	// used to know when war prism was created so only one is queued
+	virtual void OnUnitCreated(const Unit *unit) final;
+
+	// mainly to know when warp gate research is completed
+	virtual void OnUpgradeCompleted(UpgradeID upgrade_id);
+
 	// send a worker to scout given location
 	void scout(Point2D location);
+
+	// returns true if probe is a scout 
+	const bool is_scout(const Unit *unit);
+
+	// set worker responsible to scout and send it to position
+	void set_builder();
+
+	// returns true if probe is a builder 
+	const bool is_builder(const Unit *unit);
 
 	// returns a random probe that is not a scout 
 	const Unit * random_probe();
@@ -43,7 +63,8 @@ private:
 	// builds the given type of structure in the given coordinates
 	// it checks pre-requisites such as mineral/vespene cost, required buildings
 	// and proximity to a pylon depending on the building
-	bool build(ABILITY_ID ability_type_for_structure, Point2D location);
+	bool build(ABILITY_ID ability_type_for_structure, Point2D location, 
+			   const Unit *unit);
 
 
 	// build helper that determines location of neares vespene geyser and tries 
@@ -54,6 +75,9 @@ private:
 	// existing pylon (pre-requisite)
 	bool is_near_pylon(Point2D location);
 
+	// handles upgrades e.g. wrapgrate research
+	bool upgrade(ABILITY_ID upgrade_type);
+
 	// copied from tutorial https://blizzard.github.io/s2client-api/
 	// return number of units/buildings of given type
 	size_t CountUnitType(UNIT_TYPEID unit_type);
@@ -61,9 +85,6 @@ private:
 	// copied from tutorial https://blizzard.github.io/s2client-api/
 	// find closest mineral path from start (start is usually nexus from main base)
 	const Unit *FindNearestMineralPatch(const Point2D &start);
-
-	// returns true if probe is a scout 
-	const bool is_scout(const Unit *unit);
 
 	// set initial variables
 	void set_variables();
@@ -77,6 +98,13 @@ private:
 	void load_bottom_right();
 	void load_bottom_left();
 
+	// set locations of proxy pylons 
+	void load_proxy_pylons();
+
+	// given an array of Point2D and a point return the coordinates in array
+	// closest to point
+	Point2D closest(std::vector<Point2D> a, Point2D p);
+
 	// data
 
 	const ObservationInterface *observation; 
@@ -87,6 +115,9 @@ private:
 	// locations of where the buildings are going to be placed
 	std::vector<Point2D> build_placement; 
 
+	// location of proxy pylons
+	std::vector<Point2D> proxy_pylons;
+
 	// set containing the probes working on assimilators
 	std::set<const Unit*> gas_workers; 
 
@@ -94,15 +125,19 @@ private:
 	// buildings near pylons)
 	std::vector<Point2D> pylons;
 
-	Point2D base;                      // start location (of our nexus)
-	std::vector<Point2D> opp_location; // opponent's potential start locations
-	Point2D opp_base;                  // opponent's start location
+	Point2D base;                        // start location (of our nexus)
+	Point2D expansion;					 // location of expansion
+	std::vector<Point2D> opp_location;   // opponent's potential start locations
+	std::vector<Point2D> warp_positions; // all the potential warp positions
+	Point2D opp_base;                    // opponent's start location
+	Point2D warp_position; 			     // location where the warp prism will warp units
 
-	const Unit *scout_unit; // contains probe scout
-	const Unit *builder_unit; 
+	const Unit *scout_unit;   // contains probe scout
+	const Unit *builder_unit; // probe responsible for expansion
 
-	int index;            // index of build order and location
-	int scout_location;   // counter for number of locations scouted 
+	int index_build;            // index of build order and location
+	int index_pylon;			
+	int scout_location;         // counter for number of locations scouted 
 
 	bool opp_base_found;
 	bool pylon_completed;
@@ -110,5 +145,11 @@ private:
 	bool gateway_completed;
 	bool core_completed;
 	bool twilight_completed;
+
+	bool research_wrapgate;
+	bool warp_ready;
+
+	bool warp_prism;
+
 	const Unit *sybernetiscore;
 };

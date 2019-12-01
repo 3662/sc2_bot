@@ -24,10 +24,19 @@
     <ClCompile Include="init.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="building.cpp">
+    <ClCompile Include="research.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scouting.cpp">
+    <ClCompile Include="utility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="build.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="expand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

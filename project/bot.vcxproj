@@ -130,10 +130,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bot_master.cpp" />
-    <ClCompile Include="building.cpp" />
+    <ClCompile Include="build.cpp" />
+    <ClCompile Include="expand.cpp" />
     <ClCompile Include="init.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="scouting.cpp" />
+    <ClCompile Include="research.cpp" />
+    <ClCompile Include="scout.cpp" />
+    <ClCompile Include="utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bot_master.h" />
