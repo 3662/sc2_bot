@@ -144,7 +144,7 @@ void bot_master::OnBuildingConstructionComplete(const sc2::Unit *unit) {
 		case UNIT_TYPEID::PROTOSS_CYBERNETICSCORE: {
 			core_completed = true;
 			sybernetiscore = unit;
-			build(ABILITY_ID::RESEARCH_WARPGATE, Point2D(0, 0), nullptr);
+			upgrade(ABILITY_ID::RESEARCH_WARPGATE);
 			break;
 		}
 		case UNIT_TYPEID::PROTOSS_TWILIGHTCOUNCIL: {
