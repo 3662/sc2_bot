@@ -6,7 +6,7 @@
 using namespace sc2;
 
 // returns the euclidean distance between two points 
-double euclidean_dist(Point2D a, Point2D b) {
+double bot_master::euclidean_dist(const Point2D a, const Point2D b) {
     return sqrt(pow(a.x-b.x, 2) + pow(a.y-b.y, 2));
 }
 
@@ -26,3 +26,52 @@ Point2D bot_master::closest(std::vector<Point2D> a, Point2D p) {
 
     return min_loc;
 }
+
+size_t bot_master::CountUnitType(UNIT_TYPEID unit_type) {
+	return observation->GetUnits(Unit::Alliance::Self, IsUnit(unit_type)).size();
+}
+
+const Unit * bot_master::FindNearestMineralPatch(const Point2D &start) {
+	Units units = observation->GetUnits(Unit::Alliance::Neutral);
+	float distance = std::numeric_limits<float>::max();
+
+	const Unit *target = nullptr;
+
+	for (const auto &u : units) {
+		if (u->unit_type == UNIT_TYPEID::NEUTRAL_MINERALFIELD) {
+			float d = DistanceSquared2D(u->pos, start);
+			if (d < distance) {
+				distance = d;
+				target = u;
+			}
+		}
+	}
+
+	return target;
+}
+
+void bot_master::selection_sort(std::vector<Point2D> &a, Point2D p) {
+    // selection sort
+
+    int size = a.size(); // size of vector
+
+    for (int i = 0; i < size; ++i) {
+        int index = i;                             // index of closest point
+        double min_dist = euclidean_dist(a[i], p); // closest dist
+        for (int j = i+1; j < size; ++j) {
+            double dist = euclidean_dist(a[j], p);
+            if (dist < min_dist) {
+                // then update values 
+                index = j;
+                min_dist = dist;
+            }
+        }
+        std::swap(a[i], a[index]); // swap them
+    }
+
+    std::cout << "sorted:\n";
+    for (const auto e : a) {
+        std::cout << e.x << " " << e.y << " " << euclidean_dist(e, p) << std::endl;
+    }   
+}
+

@@ -78,6 +78,9 @@ void bot_master::OnUnitEnterVision(const sc2::Unit *unit) {
 				opp_base = closest(opp_location, scout_unit->pos);
 				opp_base_found = true;
 
+				// sort expansions vector according to their distance to opp_base 
+				selection_sort(expansions, opp_base);
+
 				// now set the warp location based on our opponent's start loc
 				warp_position = closest(warp_positions, opp_base);
 			}
@@ -85,11 +88,14 @@ void bot_master::OnUnitEnterVision(const sc2::Unit *unit) {
 		}
 		case UNIT_TYPEID::ZERG_HATCHERY: {
 			if (!opp_base_found) {
-				std::cout << "opponent position: " << unit->pos.x << " " << unit->pos.y << std::endl; 
+				std::cout << "opponent position: " << unit->pos.x << " " << unit->pos.y  << std::endl; 
 				// this set the starting opponent location to the one closest 
 				// to where the base was found 
 				opp_base = closest(opp_location, scout_unit->pos);
 				opp_base_found = true;
+
+				// sort expansions vector according to their distance to opp_base 
+				selection_sort(expansions, opp_base);
 
 				// now set the warp location based on our opponent's start loc
 				warp_position = closest(warp_positions, opp_base);
@@ -103,6 +109,9 @@ void bot_master::OnUnitEnterVision(const sc2::Unit *unit) {
 				opp_base = closest(opp_location, scout_unit->pos);
 				opp_base_found = true;
 
+				// sort expansions vector according to their distance to opp_base 
+				selection_sort(expansions, opp_base);
+
 				// now set the warp location based on our opponent's start loc
 				warp_position = closest(warp_positions, opp_base);
 			}
@@ -113,7 +122,7 @@ void bot_master::OnUnitEnterVision(const sc2::Unit *unit) {
 }
 
 void bot_master::OnBuildingConstructionComplete(const sc2::Unit *unit) {
-	std::cout << unit->pos.x << "  " << unit->pos.y << std::endl;
+	// std::cout << unit->pos.x << "  " << unit->pos.y << std::endl;
 	// set to true the buildings completed so we know the required buildings
 	// have been completed
 	switch(unit->unit_type.ToType()) {
@@ -164,7 +173,7 @@ void bot_master::OnUnitIdle(const Unit *unit) {
 		}
 		case UNIT_TYPEID::PROTOSS_PROBE: {
 			if (is_scout(unit)) {
-				std::cout << "keep exploring" << std::endl;
+				// std::cout << "keep exploring" << std::endl;
 				// if not seen the opponent's start location then check 
 				// the next potential location 
 				if (scout_location < 3) {
@@ -190,6 +199,7 @@ void bot_master::OnUnitIdle(const Unit *unit) {
 			if (!warp_prism) {
 				Actions()->UnitCommand(unit, ABILITY_ID::TRAIN_WARPPRISM);
 			}
+			break;
 		}
 		case UNIT_TYPEID::PROTOSS_WARPPRISM: {
 			// if not already in position to warp units 
@@ -202,14 +212,36 @@ void bot_master::OnUnitIdle(const Unit *unit) {
 				Actions()->UnitCommand(unit, ABILITY_ID::MORPH_WARPPRISMPHASINGMODE);
 				warp_ready = true;
 			}
-		}
-		case UNIT_TYPEID::PROTOSS_DARKTEMPLAR: {
-			// send them to attack
-			Actions()->UnitCommand(unit, ABILITY_ID::ATTACK_ATTACK, opp_base);
+			break;
 		}
 		case UNIT_TYPEID::PROTOSS_ZEALOT: {
-			// send them to attack
-			Actions()->UnitCommand(unit, ABILITY_ID::ATTACK_ATTACK, opp_base);
+			// same as dark templar
+		}
+		case UNIT_TYPEID::PROTOSS_DARKTEMPLAR: {
+			// std::cout << "attack: " << expansions[index_patroll].x << " " << expansions[index_patroll].y << " " << index_patroll << std::endl;
+			// send them to attack the current location in expansions 
+
+			// if done attacking location in "expansions" 
+			if (euclidean_dist(unit->pos, expansions[index_patroll]) < 3) {
+				std::cout << "done attacking\n";
+				++index_patroll;
+			}
+
+			// if our starting base skip attacking it 
+			if (index_patroll < expansions.size() && 
+				expansions[index_patroll].x == base.x && 
+				expansions[index_patroll].y == base.y) {
+				++index_patroll;
+			}
+
+			// if all have been explored loop back to begining 
+			if (index_patroll >= expansions.size()) {
+				index_patroll = 0;
+			}
+
+			Actions()->UnitCommand(unit, ABILITY_ID::ATTACK_ATTACK, 
+			                       expansions[index_patroll]);
+			break;
 		}
 		default: {
 			break;
@@ -231,7 +263,7 @@ void bot_master::OnUnitCreated(const Unit *unit) {
 void bot_master::OnUnitDestroyed(const Unit *unit) {
 	// if scout was killed and opp base has not been determined 
 	if (is_scout(unit) && !opp_base_found) {
-		std::cout << "scout was killed\n";
+		// std::cout << "scout was killed\n";
 		// set it to the closest base where the probe was killed
 		opp_base = closest(opp_location, unit->pos);
 		opp_base_found = true;
@@ -277,25 +309,3 @@ const Unit * bot_master::random_probe() {
     return unit_selected;
 }
 
-size_t bot_master::CountUnitType(UNIT_TYPEID unit_type) {
-	return observation->GetUnits(Unit::Alliance::Self, IsUnit(unit_type)).size();
-}
-
-const Unit * bot_master::FindNearestMineralPatch(const Point2D &start) {
-	Units units = observation->GetUnits(Unit::Alliance::Neutral);
-	float distance = std::numeric_limits<float>::max();
-
-	const Unit *target = nullptr;
-
-	for (const auto &u : units) {
-		if (u->unit_type == UNIT_TYPEID::NEUTRAL_MINERALFIELD) {
-			float d = DistanceSquared2D(u->pos, start);
-			if (d < distance) {
-				distance = d;
-				target = u;
-			}
-		}
-	}
-
-	return target;
-}

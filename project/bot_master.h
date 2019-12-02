@@ -84,7 +84,7 @@ private:
 
 	// copied from tutorial https://blizzard.github.io/s2client-api/
 	// find closest mineral path from start (start is usually nexus from main base)
-	const Unit *FindNearestMineralPatch(const Point2D &start);
+	const Unit * FindNearestMineralPatch(const Point2D &start);
 
 	// set initial variables
 	void set_variables();
@@ -101,9 +101,20 @@ private:
 	// set locations of proxy pylons 
 	void load_proxy_pylons();
 
+	// set the 16 potential expansions
+	void load_expansions();
+
+	// returns the euclidean distance between two points 
+	double euclidean_dist(const Point2D a, const Point2D b);
+
 	// given an array of Point2D and a point return the coordinates in array
 	// closest to point
 	Point2D closest(std::vector<Point2D> a, Point2D p);
+
+	// custom selection sort
+	// given an array of points a sort them in non-decreasing order based 
+	// on their distance to point p
+	void selection_sort(std::vector<Point2D> &a, Point2D p);
 
 	// data
 
@@ -129,6 +140,7 @@ private:
 	Point2D expansion;					 // location of expansion
 	std::vector<Point2D> opp_location;   // opponent's potential start locations
 	std::vector<Point2D> warp_positions; // all the potential warp positions
+	std::vector<Point2D> expansions;     // all 16 potential expansion on the map
 	Point2D opp_base;                    // opponent's start location
 	Point2D warp_position; 			     // location where the warp prism will warp units
 
@@ -136,7 +148,9 @@ private:
 	const Unit *builder_unit; // probe responsible for expansion
 
 	int index_build;            // index of build order and location
-	int index_pylon;			
+	int index_pylon;		
+	int index_patroll;          // index of element in "expansions" that is currently 
+								// being atacked by our units	
 	int scout_location;         // counter for number of locations scouted 
 
 	bool opp_base_found;

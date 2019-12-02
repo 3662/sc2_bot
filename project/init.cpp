@@ -26,6 +26,12 @@ void bot_master::set_variables() {
     // gets the potential opponent's start locations
 	opp_location = game_info.enemy_start_locations;
 
+	for (const auto &l : opp_location) {
+		std::cout << "exp " << l.x << " " << l.y << std::endl;
+	}
+
+	std::cout << "exp " << base.x << " " << base.y << std::endl;
+
 	// set warp positions custom to the map
 	warp_positions.push_back(Point2D(28, 139));
 	warp_positions.push_back(Point2D(139, 165));
@@ -33,9 +39,12 @@ void bot_master::set_variables() {
 	warp_positions.push_back(Point2D(52, 32));
 	// set proxy pylons locations
 	load_proxy_pylons();
+	// set expansions
+	load_expansions();
 
 	index_build = 0;
 	index_pylon = 0;
+	index_patroll = 0;
     scout_location = 0;
 	scout_unit = nullptr;
 	pylon_completed = false;
@@ -187,4 +196,23 @@ void bot_master::load_bottom_left() {
 void bot_master::load_proxy_pylons() {
 	proxy_pylons.push_back(Point2D(76, 70));
 	proxy_pylons.push_back(Point2D(76, 121));
+}
+
+void bot_master::load_expansions() {
+	expansions.push_back(Point2D(33.5, 158.5));
+	expansions.push_back(Point2D(66, 163));
+	expansions.push_back(Point2D(53, 134));
+	expansions.push_back(Point2D(92, 158));
+	expansions.push_back(Point2D(134, 139));
+	expansions.push_back(Point2D(158.5, 158.5));
+	expansions.push_back(Point2D(163, 126));
+	expansions.push_back(Point2D(158, 98));
+	expansions.push_back(Point2D(138, 58));
+	expansions.push_back(Point2D(158.5, 33.5));
+	expansions.push_back(Point2D(125, 29));
+	expansions.push_back(Point2D(98, 34));
+	expansions.push_back(Point2D(59, 53));
+	expansions.push_back(Point2D(30, 67));
+	expansions.push_back(Point2D(33.5, 33.5));
+	expansions.push_back(Point2D(35, 93));
 }

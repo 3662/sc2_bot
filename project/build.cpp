@@ -7,7 +7,6 @@ using namespace sc2;
 
 bool bot_master::build(ABILITY_ID ability_type_for_structure, Point2D location, 
                        const Unit *unit) {
-    
     const Unit *unit_to_build;
 
     if (unit == nullptr) {
@@ -16,7 +15,8 @@ bool bot_master::build(ABILITY_ID ability_type_for_structure, Point2D location,
         unit_to_build = unit;
     }
 
-    if (!unit_to_build) { 
+    if (unit_to_build == nullptr) { 
+        std::cout << "null builder\n";
         return false;
     }
 
