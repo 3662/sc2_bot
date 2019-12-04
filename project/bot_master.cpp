@@ -123,7 +123,7 @@ void bot_master::OnUnitEnterVision(const sc2::Unit *unit) {
 }
 
 void bot_master::OnBuildingConstructionComplete(const sc2::Unit *unit) {
-	std::cout << unit->pos.x << "  " << unit->pos.y << std::endl;
+	// std::cout << unit->pos.x << "  " << unit->pos.y << std::endl;
 	// set to true the buildings completed so we know the required buildings
 	// have been completed
 	switch(unit->unit_type.ToType()) {
@@ -282,6 +282,13 @@ void bot_master::OnUnitDestroyed(const Unit *unit) {
 			break;
 		}
 		case UNIT_TYPEID::PROTOSS_WARPPRISM: {
+			// std::cout << "warp killed\n";
+			// if warp prism was killed then set variables to false to build a new one 
+			warp_prism = false;
+			warp_ready = false;
+			break;
+		}
+		case UNIT_TYPEID::PROTOSS_WARPPRISMPHASING: {
 			// std::cout << "warp killed\n";
 			// if warp prism was killed then set variables to false to build a new one 
 			warp_prism = false;

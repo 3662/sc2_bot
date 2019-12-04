@@ -84,13 +84,14 @@ void bot_master::load_build_order() {
 	build_order.push_back(ABILITY_ID::BUILD_ROBOTICSFACILITY);
 	build_order.push_back(ABILITY_ID::BUILD_TWILIGHTCOUNCIL);
 	build_order.push_back(ABILITY_ID::BUILD_DARKSHRINE);
+	build_order.push_back(ABILITY_ID::BUILD_PHOTONCANNON);
 	build_order.push_back(ABILITY_ID::BUILD_PYLON);
 	build_order.push_back(ABILITY_ID::BUILD_GATEWAY);
 	build_order.push_back(ABILITY_ID::BUILD_GATEWAY);
 	build_order.push_back(ABILITY_ID::BUILD_GATEWAY);
 	build_order.push_back(ABILITY_ID::BUILD_GATEWAY);
 	build_order.push_back(ABILITY_ID::BUILD_GATEWAY);
-	build_order.push_back(ABILITY_ID::BUILD_GATEWAY);
+	// build_order.push_back(ABILITY_ID::BUILD_GATEWAY);
 	build_order.push_back(ABILITY_ID::BUILD_PYLON);
 }
 
@@ -113,13 +114,14 @@ void bot_master::load_top_left() {
 	build_placement.push_back(Point2D(44.5, 160.5));
 	build_placement.push_back(Point2D(41.5, 157.5));
 	build_placement.push_back(Point2D(42, 160));
+	build_placement.push_back(Point2D(50, 165));
 	build_placement.push_back(Point2D(41, 152));
 	build_placement.push_back(Point2D(41.5, 154.5));
 	build_placement.push_back(Point2D(44.5, 154.5));
 	build_placement.push_back(Point2D(38.5, 154.5));
 	build_placement.push_back(Point2D(38.5, 151.5));
 	build_placement.push_back(Point2D(26.5, 166.5));
-	build_placement.push_back(Point2D(23.5, 163.5));
+	// build_placement.push_back(Point2D(23.5, 163.5));
 	build_placement.push_back(Point2D(48, 164));
 }
 
@@ -141,13 +143,14 @@ void bot_master::load_top_right() {
 	build_placement.push_back(Point2D(159.5, 148.5));
 	build_placement.push_back(Point2D(162.5, 148.5));
 	build_placement.push_back(Point2D(160, 151));
+	build_placement.push_back(Point2D(164, 143));
 	build_placement.push_back(Point2D(157, 151));
 	build_placement.push_back(Point2D(156.5, 148.5));
 	build_placement.push_back(Point2D(153.5, 154.5));
 	build_placement.push_back(Point2D(153.5, 148.5));
 	build_placement.push_back(Point2D(153.5, 151.5));
 	build_placement.push_back(Point2D(163.5, 145.5));
-	build_placement.push_back(Point2D(164.5, 166.5));
+	// build_placement.push_back(Point2D(164.5, 166.5));
 	build_placement.push_back(Point2D(166, 143));
 }
 
@@ -169,13 +172,14 @@ void bot_master::load_bottom_right() {
 	build_placement.push_back(Point2D(151.5, 34.5));
 	build_placement.push_back(Point2D(142.5, 34.5));
 	build_placement.push_back(Point2D(151, 32));
+	build_placement.push_back(Point2D(142, 27));
 	build_placement.push_back(Point2D(152, 37));
 	build_placement.push_back(Point2D(148.5, 34.5));
 	build_placement.push_back(Point2D(149.5, 37.5));
 	build_placement.push_back(Point2D(146.5, 38.5));
 	build_placement.push_back(Point2D(154.5, 37.5));
 	build_placement.push_back(Point2D(168.5, 29.5));
-	build_placement.push_back(Point2D(165.5, 25.5));
+	// build_placement.push_back(Point2D(165.5, 25.5));
 	build_placement.push_back(Point2D(144, 26));
 }
 
@@ -197,13 +201,14 @@ void bot_master::load_bottom_left() {
 	build_placement.push_back(Point2D(34.5, 43.5));
 	build_placement.push_back(Point2D(31.5, 43.5));
 	build_placement.push_back(Point2D(30, 46));
+	build_placement.push_back(Point2D(27, 50));
 	build_placement.push_back(Point2D(40, 43));
 	build_placement.push_back(Point2D(37.5, 43.5));
 	build_placement.push_back(Point2D(37.5, 40.5));
 	build_placement.push_back(Point2D(40.5, 40.5));
 	build_placement.push_back(Point2D(37.5, 46.5));
 	build_placement.push_back(Point2D(29.5, 24.5));
-	build_placement.push_back(Point2D(24.5, 28.5));
+	// build_placement.push_back(Point2D(24.5, 28.5));
 	build_placement.push_back(Point2D(28, 48));
 }
 

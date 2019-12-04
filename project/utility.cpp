@@ -92,13 +92,10 @@ const Unit * bot_master::random_probe() {
 			!is_scout(unit) && gas_workers.find(unit) == gas_workers.end()) {
 			for (auto &order : unit->orders) {
 				// std::cout << order.ability_id << std::endl;
-				if (order.ability_id != 3666 && order.ability_id != 3667) {
-					// this means the probe is doing something other than 
-					// mining so do not select it
-					break;
-				} else {
-					unit_selected = unit;
-				}
+                if (unit->orders.size() == 1 && (order.ability_id == 3666 || order.ability_id == 3667)) {
+                    // if probe is mining and has no queued orders select it
+                    unit_selected = unit;
+                }
 			}
 		} 
 	}
