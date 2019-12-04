@@ -1,3 +1,11 @@
+/*
+header file that contains documentation of "Bot Master" and all the virtual and
+defined functions we are going to use 
+
+in this file can be found detailed description of all functions and variables 
+in use
+*/
+
 #pragma once
 
 #include <sc2api/sc2_api.h>
@@ -50,9 +58,6 @@ private:
 
 	// returns true if probe is a scout 
 	const bool is_scout(const Unit *unit);
-
-	// returns true iff the unit is a defender 
-	const bool is_defender(const Unit *unit);
 
 	// set worker responsible to scout and send it to position
 	void set_builder();
@@ -139,9 +144,6 @@ private:
 	// set containing the probes working on assimilators
 	std::set<const Unit*> gas_workers; 
 
-	// the three DTs that are going  to defend the base
-	std::set<const Unit*> defenders;
-
 	// list of location of existing pylons (need to know since we have to place 
 	// buildings near pylons)
 	std::vector<Point2D> pylons;
@@ -154,15 +156,17 @@ private:
 	Point2D opp_base;                    // opponent's start location
 	Point2D warp_position; 			     // location where the warp prism will warp units
 
-	const Unit *scout_unit;   // contains probe scout
-	const Unit *builder_unit; // probe responsible for expansion
+	const Unit *scout_unit;   			 // contains probe scout
+	const Unit *builder_unit; 			 // probe responsible for expansion
 
-	int index_build;            // index of build order and location
+	int index_build;            		 // index of build order and location
 	int index_pylon;		
-	int index_patroll;          // index of element in "expansions" that is currently 
-								// being atacked by our units	
-	int scout_location;         // counter for number of locations scouted 
+	int index_patroll;          	     // index of element in "expansions" that is currently 
+										 // being atacked by our units	
+	int scout_location;         		 // counter for number of locations scouted 
 
+	// bool variables that give information regarding buildings and upgrades 
+	// being completed. used mostly to check pre-requisites 
 	bool opp_base_found;
 	bool pylon_completed;
 	bool forge_completed;
@@ -174,7 +178,6 @@ private:
 	bool research_wrapgate;
 	bool warp_ready;
 	bool warp_prism;
-	bool defenders_set;        // determines if need to create more defenders
 
 	const Unit *cybernetics;
 	const Unit *robotics;

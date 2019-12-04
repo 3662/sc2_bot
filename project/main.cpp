@@ -1,3 +1,8 @@
+/*
+simply creates an instance of our bot "bot_master" and set a match between it 
+and an AI opponent in map cactus valley
+*/
+
 #include <sc2api/sc2_api.h>
 #include <iostream>
 #include "bot_master.h"

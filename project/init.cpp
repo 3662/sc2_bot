@@ -1,3 +1,9 @@
+/*
+mostly functions called when the game start
+they initialize variables, set relevant locations and load the build order with 
+their respective building placement 
+*/
+
 #include "bot_master.h"
 #include <sc2api/sc2_api.h>
 #include <iostream>
@@ -26,11 +32,11 @@ void bot_master::set_variables() {
     // gets the potential opponent's start locations
 	opp_location = game_info.enemy_start_locations;
 
-	for (const auto &l : opp_location) {
-		std::cout << "exp " << l.x << " " << l.y << std::endl;
-	}
+	// for (const auto &l : opp_location) {
+	// 	std::cout << "exp " << l.x << " " << l.y << std::endl;
+	// }
 
-	std::cout << "exp " << base.x << " " << base.y << std::endl;
+	// std::cout << "exp " << base.x << " " << base.y << std::endl;
 
 	// set warp positions custom to the map
 	warp_positions.push_back(Point2D(28, 139));
@@ -57,23 +63,22 @@ void bot_master::set_variables() {
 	research_wrapgate = false;
 	warp_prism = false;
 	warp_ready = false;
-
-	defenders_set = false;
 }
 
+// load build order we are to execute
 void bot_master::load_build_order() {
 	build_order.push_back(ABILITY_ID::BUILD_PYLON);
 	build_order.push_back(ABILITY_ID::BUILD_FORGE);
 	build_order.push_back(ABILITY_ID::BUILD_PYLON);
 	build_order.push_back(ABILITY_ID::BUILD_PHOTONCANNON);
 	build_order.push_back(ABILITY_ID::BUILD_PYLON);
-	// build_order.push_back(ABILITY_ID::BUILD_PHOTONCANNON);
 	build_order.push_back(ABILITY_ID::BUILD_PHOTONCANNON);
-	// build_order.push_back(ABILITY_ID::BUILD_PHOTONCANNON);
-	// build_order.push_back(ABILITY_ID::BUILD_PHOTONCANNON);
+	build_order.push_back(ABILITY_ID::BUILD_PHOTONCANNON);
 	build_order.push_back(ABILITY_ID::BUILD_GATEWAY);
 	build_order.push_back(ABILITY_ID::BUILD_ASSIMILATOR);
 	build_order.push_back(ABILITY_ID::BUILD_ASSIMILATOR);
+	build_order.push_back(ABILITY_ID::BUILD_PHOTONCANNON);
+	build_order.push_back(ABILITY_ID::BUILD_PHOTONCANNON);
 	build_order.push_back(ABILITY_ID::BUILD_CYBERNETICSCORE);
 	build_order.push_back(ABILITY_ID::BUILD_PYLON);
 	build_order.push_back(ABILITY_ID::BUILD_ROBOTICSFACILITY);
@@ -86,21 +91,23 @@ void bot_master::load_build_order() {
 	build_order.push_back(ABILITY_ID::BUILD_GATEWAY);
 	build_order.push_back(ABILITY_ID::BUILD_GATEWAY);
 	build_order.push_back(ABILITY_ID::BUILD_GATEWAY);
+	build_order.push_back(ABILITY_ID::BUILD_PYLON);
 }
 
+// load build placement according to where our initial location is
 void bot_master::load_top_left() {
 	build_placement.push_back(Point2D(51, 160));
 	build_placement.push_back(Point2D(51.5, 162.5));
 	build_placement.push_back(Point2D(54, 163));
 	build_placement.push_back(Point2D(49, 160));
 	build_placement.push_back(Point2D(26, 164));
-	// build_placement.push_back(Point2D(30, 161));
+	build_placement.push_back(Point2D(30, 161));
 	build_placement.push_back(Point2D(54, 165));
-	// build_placement.push_back(Point2D(25, 160));
-	// build_placement.push_back(Point2D(30, 167));
 	build_placement.push_back(Point2D(49.5, 157.5));
 	build_placement.push_back(Point2D(36.5, 165.5));
 	build_placement.push_back(Point2D(26.5, 154.5));
+	build_placement.push_back(Point2D(49, 162));
+	build_placement.push_back(Point2D(52, 165));
 	build_placement.push_back(Point2D(46.5, 157.5));
 	build_placement.push_back(Point2D(44, 158));
 	build_placement.push_back(Point2D(44.5, 160.5));
@@ -113,6 +120,7 @@ void bot_master::load_top_left() {
 	build_placement.push_back(Point2D(38.5, 151.5));
 	build_placement.push_back(Point2D(26.5, 166.5));
 	build_placement.push_back(Point2D(23.5, 163.5));
+	build_placement.push_back(Point2D(48, 164));
 }
 
 void bot_master::load_top_right() {
@@ -121,13 +129,13 @@ void bot_master::load_top_right() {
 	build_placement.push_back(Point2D(163, 138));
 	build_placement.push_back(Point2D(160, 143));
 	build_placement.push_back(Point2D(166, 164));
-	// build_placement.push_back(Point2D(162, 161));
+	build_placement.push_back(Point2D(162, 161));
 	build_placement.push_back(Point2D(165, 138));
-	// build_placement.push_back(Point2D(162, 166));
-	// build_placement.push_back(Point2D(167, 161));
 	build_placement.push_back(Point2D(157.5, 142.5));
 	build_placement.push_back(Point2D(165.5, 154.5));
 	build_placement.push_back(Point2D(155.5, 165.5));
+	build_placement.push_back(Point2D(162, 143));
+	build_placement.push_back(Point2D(165, 140));
 	build_placement.push_back(Point2D(160.5, 145.5));
 	build_placement.push_back(Point2D(158, 146));
 	build_placement.push_back(Point2D(159.5, 148.5));
@@ -140,6 +148,7 @@ void bot_master::load_top_right() {
 	build_placement.push_back(Point2D(153.5, 151.5));
 	build_placement.push_back(Point2D(163.5, 145.5));
 	build_placement.push_back(Point2D(164.5, 166.5));
+	build_placement.push_back(Point2D(166, 143));
 }
 
 void bot_master::load_bottom_right() {
@@ -148,13 +157,13 @@ void bot_master::load_bottom_right() {
 	build_placement.push_back(Point2D(138, 29));
 	build_placement.push_back(Point2D(143, 32));
 	build_placement.push_back(Point2D(166, 28));
-	// build_placement.push_back(Point2D(162, 31));
+	build_placement.push_back(Point2D(162, 31));
 	build_placement.push_back(Point2D(138, 27));
-	// build_placement.push_back(Point2D(167, 32));
-	// build_placement.push_back(Point2D(163, 26));
 	build_placement.push_back(Point2D(145.5, 32.5));	
 	build_placement.push_back(Point2D(155.5, 26.5));
 	build_placement.push_back(Point2D(165.5, 37.5));
+	build_placement.push_back(Point2D(143, 30));
+	build_placement.push_back(Point2D(140, 27));
 	build_placement.push_back(Point2D(145.5, 29.5));
 	build_placement.push_back(Point2D(148.5, 29.5));
 	build_placement.push_back(Point2D(151.5, 34.5));
@@ -167,6 +176,7 @@ void bot_master::load_bottom_right() {
 	build_placement.push_back(Point2D(154.5, 37.5));
 	build_placement.push_back(Point2D(168.5, 29.5));
 	build_placement.push_back(Point2D(165.5, 25.5));
+	build_placement.push_back(Point2D(144, 26));
 }
 
 void bot_master::load_bottom_left() {
@@ -175,13 +185,13 @@ void bot_master::load_bottom_left() {
 	build_placement.push_back(Point2D(29, 54));
 	build_placement.push_back(Point2D(32, 49));
 	build_placement.push_back(Point2D(27, 27));
-	// build_placement.push_back(Point2D(30, 31));
+	build_placement.push_back(Point2D(30, 31));
 	build_placement.push_back(Point2D(27, 54));
-	// build_placement.push_back(Point2D(32, 25));
-	// build_placement.push_back(Point2D(24, 32));
 	build_placement.push_back(Point2D(34.5, 49.5));
 	build_placement.push_back(Point2D(26.5, 37.5));
 	build_placement.push_back(Point2D(36.5, 26.5));
+	build_placement.push_back(Point2D(30, 49));
+	build_placement.push_back(Point2D(27, 52));
 	build_placement.push_back(Point2D(34.5, 46.5));
 	build_placement.push_back(Point2D(32, 46));
 	build_placement.push_back(Point2D(34.5, 43.5));
@@ -194,6 +204,7 @@ void bot_master::load_bottom_left() {
 	build_placement.push_back(Point2D(37.5, 46.5));
 	build_placement.push_back(Point2D(29.5, 24.5));
 	build_placement.push_back(Point2D(24.5, 28.5));
+	build_placement.push_back(Point2D(28, 48));
 }
 
 void bot_master::load_proxy_pylons() {
@@ -220,6 +231,7 @@ void bot_master::load_expansions() {
 	expansions.push_back(Point2D(35, 93));
 }
 
+// set variables depending on where our opponent has bagan
 void bot_master::set_opp_position() {
     // assumes the opp base has been found 
     if (opp_base_found) {

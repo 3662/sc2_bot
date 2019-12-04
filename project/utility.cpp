@@ -1,3 +1,7 @@
+/*
+various functions that deal with a variety of tasks  
+*/
+
 #include "bot_master.h"
 #include <sc2api/sc2_api.h>
 #include <iostream>
@@ -69,10 +73,10 @@ void bot_master::selection_sort(std::vector<Point2D> &a, Point2D p) {
         std::swap(a[i], a[index]); // swap them
     }
 
-    std::cout << "sorted:\n";
-    for (const auto e : a) {
-        std::cout << e.x << " " << e.y << " " << euclidean_dist(e, p) << std::endl;
-    }   
+    // std::cout << "sorted:\n";
+    // for (const auto e : a) {
+    //     std::cout << e.x << " " << e.y << " " << euclidean_dist(e, p) << std::endl;
+    // }   
 }
 
 const Unit * bot_master::random_probe() {
@@ -99,11 +103,6 @@ const Unit * bot_master::random_probe() {
 		} 
 	}
     return unit_selected;
-}
-
-const bool bot_master::is_defender(const Unit *unit) {
-    // checks if unit is inside set "defenders"
-    return defenders.find(unit) != defenders.end();
 }
 
 

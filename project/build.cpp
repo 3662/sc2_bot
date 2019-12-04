@@ -1,3 +1,9 @@
+/*
+contains functions that handle building, building placement and proximity 
+to pylons 
+also check pre-conditions 
+*/
+
 #include "bot_master.h"
 #include <sc2api/sc2_api.h>
 #include <sc2lib/sc2_lib.h>

@@ -1,3 +1,8 @@
+/*
+implements virtual functions that handle game events such as "OnStep" and the 
+rest of the On... type functions we are going to use 
+*/
+
 #include "bot_master.h"
 #include <sc2api/sc2_api.h>
 #include <iostream>
@@ -63,7 +68,7 @@ void bot_master::OnStep() {
 	}
 
 	// tries to build proxy pylon
-	if (minerals > 500 && index_pylon < proxy_pylons.size()) {
+	if (minerals > 800 && index_pylon < proxy_pylons.size()) {
 		if (builder_unit->orders.empty()) {
 			// if doing nothing
 			if (build(ABILITY_ID::BUILD_PYLON, proxy_pylons[index_pylon], 
@@ -92,7 +97,7 @@ void bot_master::OnUnitEnterVision(const sc2::Unit *unit) {
 		}
 		case UNIT_TYPEID::ZERG_HATCHERY: {
 			if (!opp_base_found) {
-				std::cout << "opponent position: " << unit->pos.x << " " << unit->pos.y  << std::endl; 
+				// std::cout << "opponent position: " << unit->pos.x << " " << unit->pos.y  << std::endl; 
 				// this set the starting opponent location to the one closest 
 				// to where the base was found 
 				opp_base = closest(opp_location, scout_unit->pos);
@@ -118,7 +123,7 @@ void bot_master::OnUnitEnterVision(const sc2::Unit *unit) {
 }
 
 void bot_master::OnBuildingConstructionComplete(const sc2::Unit *unit) {
-	// std::cout << unit->pos.x << "  " << unit->pos.y << std::endl;
+	std::cout << unit->pos.x << "  " << unit->pos.y << std::endl;
 	// set to true the buildings completed so we know the required buildings
 	// have been completed
 	switch(unit->unit_type.ToType()) {
@@ -215,32 +220,30 @@ void bot_master::OnUnitIdle(const Unit *unit) {
 			// same as dark templar
 		}
 		case UNIT_TYPEID::PROTOSS_DARKTEMPLAR: {
-			// if it is a defender do not move it
-			if (!is_defender(unit)) {
-				// std::cout << "attack: " << expansions[index_patroll].x << " " << expansions[index_patroll].y << " " << index_patroll << std::endl;
-				// send them to attack the current location in expansions 
+			// std::cout << "attack: " << expansions[index_patroll].x << " " << expansions[index_patroll].y << " " << index_patroll << std::endl;
+			// send them to attack the current location in expansions 
 
-				// if done attacking location in "expansions" 
-				if (euclidean_dist(unit->pos, expansions[index_patroll]) < 3) {
-					std::cout << "done attacking\n";
-					++index_patroll;
-				}
-
-				// if our starting base skip attacking it 
-				if (index_patroll < expansions.size() && 
-					expansions[index_patroll].x == base.x && 
-					expansions[index_patroll].y == base.y) {
-					++index_patroll;
-				}
-
-				// if all have been explored loop back to begining 
-				if (index_patroll >= expansions.size()) {
-					index_patroll = 0;
-				}
-
-				Actions()->UnitCommand(unit, ABILITY_ID::ATTACK_ATTACK, 
-									expansions[index_patroll]);
+			// if done attacking location in "expansions" 
+			if (euclidean_dist(unit->pos, expansions[index_patroll]) < 3) {
+				// std::cout << "done attacking\n";
+				++index_patroll;
 			}
+
+			// if our starting base skip attacking it 
+			if (index_patroll < expansions.size() && 
+				expansions[index_patroll].x == base.x && 
+				expansions[index_patroll].y == base.y) {
+				++index_patroll;
+			}
+
+			// if all have been explored loop back to begining 
+			if (index_patroll >= expansions.size()) {
+				index_patroll = 0;
+			}
+
+			Actions()->UnitCommand(unit, ABILITY_ID::ATTACK_ATTACK, 
+								expansions[index_patroll]);
+			
 			break;
 		}
 		default: {
@@ -256,7 +259,7 @@ void bot_master::OnUnitCreated(const Unit *unit) {
 			break;
 		}
 		case UNIT_TYPEID::PROTOSS_DARKTEMPLAR: {
-			std::cout << unit->pos.x << " " << unit->pos.y << std::endl;
+			// std::cout << unit->pos.x << " " << unit->pos.y << std::endl;
 		}
 		default: {
 			break;
@@ -269,7 +272,7 @@ void bot_master::OnUnitDestroyed(const Unit *unit) {
 		case UNIT_TYPEID::PROTOSS_PROBE: {
 			// if scout was killed and opp base has not been determined 
 			if (is_scout(unit) && !opp_base_found) {
-				std::cout << "scout was killed\n";
+				// std::cout << "scout was killed\n";
 				// set it to the closest base where the probe was killed
 				opp_base = closest(opp_location, unit->pos);
 				opp_base_found = true;

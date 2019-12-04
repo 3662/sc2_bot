@@ -1,3 +1,7 @@
+/*
+functions that set a scout and send it to given locations on the map 
+*/
+
 #include "bot_master.h"
 #include <sc2api/sc2_api.h>
 #include <iostream>

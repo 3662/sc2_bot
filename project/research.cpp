@@ -1,3 +1,8 @@
+/*
+handles technology research
+currently only researching warp gate
+*/
+
 #include "bot_master.h"
 #include <sc2api/sc2_api.h>
 #include <sc2lib/sc2_lib.h>

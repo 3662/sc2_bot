@@ -1,3 +1,7 @@
+/*
+currently only handles selection of builder since we are not expanding
+*/
+
 #include "bot_master.h"
 #include <sc2api/sc2_api.h>
 #include <iostream>
