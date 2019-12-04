@@ -1,2 +1,10 @@
 ﻿  bot_master.cpp
+  build.cpp
+  expand.cpp
+  init.cpp
+  main.cpp
+  research.cpp
+  scout.cpp
+  utility.cpp
+  Generating Code...
   bot.vcxproj -> C:\Users\rdrgu_000\Desktop\github\sc2_bot\project\x64\Debug\bot.exe

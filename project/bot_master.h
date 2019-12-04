@@ -51,6 +51,9 @@ private:
 	// returns true if probe is a scout 
 	const bool is_scout(const Unit *unit);
 
+	// returns true iff the unit is a defender 
+	const bool is_defender(const Unit *unit);
+
 	// set worker responsible to scout and send it to position
 	void set_builder();
 
@@ -116,6 +119,10 @@ private:
 	// on their distance to point p
 	void selection_sort(std::vector<Point2D> &a, Point2D p);
 
+	// set warp prism position and sort expansions according to distance to 
+	// opponent's location after having found it 
+	void set_opp_position();
+
 	// data
 
 	const ObservationInterface *observation; 
@@ -131,6 +138,9 @@ private:
 
 	// set containing the probes working on assimilators
 	std::set<const Unit*> gas_workers; 
+
+	// the three DTs that are going  to defend the base
+	std::set<const Unit*> defenders;
 
 	// list of location of existing pylons (need to know since we have to place 
 	// buildings near pylons)
@@ -159,11 +169,13 @@ private:
 	bool gateway_completed;
 	bool core_completed;
 	bool twilight_completed;
+	bool robotics_completed;
 
 	bool research_wrapgate;
 	bool warp_ready;
-
 	bool warp_prism;
+	bool defenders_set;        // determines if need to create more defenders
 
-	const Unit *sybernetiscore;
+	const Unit *cybernetics;
+	const Unit *robotics;
 };

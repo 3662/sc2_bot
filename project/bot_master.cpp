@@ -36,6 +36,14 @@ void bot_master::OnStep() {
 	int minerals = observation->GetMinerals();
 	int vespene  = observation->GetVespene();
 
+	// tries to build a warp prism 
+	if (!warp_prism && robotics_completed) {
+		// robotics have no orders 
+		if (robotics->orders.size() == 0) {
+			Actions()->UnitCommand(robotics, ABILITY_ID::TRAIN_WARPPRISM);
+		}
+	}
+
 	// tries to warp units 
 	if (research_wrapgate && warp_ready) {
 		Units units = observation->GetUnits(Unit::Alliance::Self);
@@ -78,11 +86,7 @@ void bot_master::OnUnitEnterVision(const sc2::Unit *unit) {
 				opp_base = closest(opp_location, scout_unit->pos);
 				opp_base_found = true;
 
-				// sort expansions vector according to their distance to opp_base 
-				selection_sort(expansions, opp_base);
-
-				// now set the warp location based on our opponent's start loc
-				warp_position = closest(warp_positions, opp_base);
+				set_opp_position(); // set warp location and expansions to attack
 			}
 			break;
 		}
@@ -94,11 +98,7 @@ void bot_master::OnUnitEnterVision(const sc2::Unit *unit) {
 				opp_base = closest(opp_location, scout_unit->pos);
 				opp_base_found = true;
 
-				// sort expansions vector according to their distance to opp_base 
-				selection_sort(expansions, opp_base);
-
-				// now set the warp location based on our opponent's start loc
-				warp_position = closest(warp_positions, opp_base);
+				set_opp_position(); // set warp location and expansions to attack 
 			}
 			break;
 		}
@@ -109,11 +109,7 @@ void bot_master::OnUnitEnterVision(const sc2::Unit *unit) {
 				opp_base = closest(opp_location, scout_unit->pos);
 				opp_base_found = true;
 
-				// sort expansions vector according to their distance to opp_base 
-				selection_sort(expansions, opp_base);
-
-				// now set the warp location based on our opponent's start loc
-				warp_position = closest(warp_positions, opp_base);
+				set_opp_position(); // set warp location and expansions to attack
 			}
 			break;
 		}
@@ -152,12 +148,20 @@ void bot_master::OnBuildingConstructionComplete(const sc2::Unit *unit) {
 		}
 		case UNIT_TYPEID::PROTOSS_CYBERNETICSCORE: {
 			core_completed = true;
-			sybernetiscore = unit;
+			cybernetics = unit;
 			upgrade(ABILITY_ID::RESEARCH_WARPGATE);
 			break;
 		}
 		case UNIT_TYPEID::PROTOSS_TWILIGHTCOUNCIL: {
 			twilight_completed = true; break;
+		}
+		case UNIT_TYPEID::PROTOSS_ROBOTICSFACILITY: {
+			// if there is no warprism then train one 
+			robotics_completed = true;
+			robotics = unit;
+		}
+		default: {
+			break;
 		}
 	}
 }
@@ -194,13 +198,6 @@ void bot_master::OnUnitIdle(const Unit *unit) {
 			Actions()->UnitCommand(unit, ABILITY_ID::SMART, mineral_target);
 			break;
 		}
-		case UNIT_TYPEID::PROTOSS_ROBOTICSFACILITY: {
-			// if there is no warprism then train one 
-			if (!warp_prism) {
-				Actions()->UnitCommand(unit, ABILITY_ID::TRAIN_WARPPRISM);
-			}
-			break;
-		}
 		case UNIT_TYPEID::PROTOSS_WARPPRISM: {
 			// if not already in position to warp units 
 			if (unit->pos.x != warp_position.x && 
@@ -218,29 +215,32 @@ void bot_master::OnUnitIdle(const Unit *unit) {
 			// same as dark templar
 		}
 		case UNIT_TYPEID::PROTOSS_DARKTEMPLAR: {
-			// std::cout << "attack: " << expansions[index_patroll].x << " " << expansions[index_patroll].y << " " << index_patroll << std::endl;
-			// send them to attack the current location in expansions 
+			// if it is a defender do not move it
+			if (!is_defender(unit)) {
+				// std::cout << "attack: " << expansions[index_patroll].x << " " << expansions[index_patroll].y << " " << index_patroll << std::endl;
+				// send them to attack the current location in expansions 
 
-			// if done attacking location in "expansions" 
-			if (euclidean_dist(unit->pos, expansions[index_patroll]) < 3) {
-				std::cout << "done attacking\n";
-				++index_patroll;
+				// if done attacking location in "expansions" 
+				if (euclidean_dist(unit->pos, expansions[index_patroll]) < 3) {
+					std::cout << "done attacking\n";
+					++index_patroll;
+				}
+
+				// if our starting base skip attacking it 
+				if (index_patroll < expansions.size() && 
+					expansions[index_patroll].x == base.x && 
+					expansions[index_patroll].y == base.y) {
+					++index_patroll;
+				}
+
+				// if all have been explored loop back to begining 
+				if (index_patroll >= expansions.size()) {
+					index_patroll = 0;
+				}
+
+				Actions()->UnitCommand(unit, ABILITY_ID::ATTACK_ATTACK, 
+									expansions[index_patroll]);
 			}
-
-			// if our starting base skip attacking it 
-			if (index_patroll < expansions.size() && 
-				expansions[index_patroll].x == base.x && 
-				expansions[index_patroll].y == base.y) {
-				++index_patroll;
-			}
-
-			// if all have been explored loop back to begining 
-			if (index_patroll >= expansions.size()) {
-				index_patroll = 0;
-			}
-
-			Actions()->UnitCommand(unit, ABILITY_ID::ATTACK_ATTACK, 
-			                       expansions[index_patroll]);
 			break;
 		}
 		default: {
@@ -253,6 +253,10 @@ void bot_master::OnUnitCreated(const Unit *unit) {
 	switch (unit->unit_type.ToType()) {
 		case UNIT_TYPEID::PROTOSS_WARPPRISM: {
 			warp_prism = true;
+			break;
+		}
+		case UNIT_TYPEID::PROTOSS_DARKTEMPLAR: {
+			std::cout << unit->pos.x << " " << unit->pos.y << std::endl;
 		}
 		default: {
 			break;
@@ -261,12 +265,29 @@ void bot_master::OnUnitCreated(const Unit *unit) {
 }
 
 void bot_master::OnUnitDestroyed(const Unit *unit) {
-	// if scout was killed and opp base has not been determined 
-	if (is_scout(unit) && !opp_base_found) {
-		// std::cout << "scout was killed\n";
-		// set it to the closest base where the probe was killed
-		opp_base = closest(opp_location, unit->pos);
-		opp_base_found = true;
+	switch (unit->unit_type.ToType()) {
+		case UNIT_TYPEID::PROTOSS_PROBE: {
+			// if scout was killed and opp base has not been determined 
+			if (is_scout(unit) && !opp_base_found) {
+				std::cout << "scout was killed\n";
+				// set it to the closest base where the probe was killed
+				opp_base = closest(opp_location, unit->pos);
+				opp_base_found = true;
+
+				set_opp_position(); // set warp location and expansions to attack
+			}
+			break;
+		}
+		case UNIT_TYPEID::PROTOSS_WARPPRISM: {
+			// std::cout << "warp killed\n";
+			// if warp prism was killed then set variables to false to build a new one 
+			warp_prism = false;
+			warp_ready = false;
+			break;
+		}
+		default: {
+			break;
+		}
 	}
 }
 
@@ -282,30 +303,3 @@ void bot_master::OnUpgradeCompleted(UpgradeID upgrade_id) {
 		}
 	}
 }
-
-const Unit * bot_master::random_probe() {
-    const Unit *unit_selected = nullptr;
-
-	Units units = observation->GetUnits(Unit::Alliance::Self);
-
-	// get random probe that has no orther other than mine
-	// ability_id for mining and bringing resources is 3666 and 3667
-	for (const auto &unit : units) {
-		// if probe, not a scout, not a gas worker and no orders then select this unit 
-		if (unit->unit_type == UNIT_TYPEID::PROTOSS_PROBE && !is_builder(unit) &&
-			!is_scout(unit) && gas_workers.find(unit) == gas_workers.end()) {
-			for (auto &order : unit->orders) {
-				// std::cout << order.ability_id << std::endl;
-				if (order.ability_id != 3666 && order.ability_id != 3667) {
-					// this means the probe is doing something other than 
-					// mining so do not select it
-					break;
-				} else {
-					unit_selected = unit;
-				}
-			}
-		} 
-	}
-    return unit_selected;
-}
-

@@ -18,7 +18,7 @@ bool bot_master::upgrade(ABILITY_ID upgrade_type) {
                 || !gateway_completed|| !core_completed) {
 				return false;
 			}
-			Actions()->UnitCommand(sybernetiscore, upgrade_type);
+			Actions()->UnitCommand(cybernetics, upgrade_type);
 			return true;
 		}
 		default:

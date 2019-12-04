@@ -52,10 +52,13 @@ void bot_master::set_variables() {
 	gateway_completed = false;
 	core_completed = false;
 	twilight_completed = false;
+	robotics_completed = false;
     opp_base_found = false;
 	research_wrapgate = false;
 	warp_prism = false;
 	warp_ready = false;
+
+	defenders_set = false;
 }
 
 void bot_master::load_build_order() {
@@ -64,10 +67,10 @@ void bot_master::load_build_order() {
 	build_order.push_back(ABILITY_ID::BUILD_PYLON);
 	build_order.push_back(ABILITY_ID::BUILD_PHOTONCANNON);
 	build_order.push_back(ABILITY_ID::BUILD_PYLON);
+	// build_order.push_back(ABILITY_ID::BUILD_PHOTONCANNON);
 	build_order.push_back(ABILITY_ID::BUILD_PHOTONCANNON);
-	build_order.push_back(ABILITY_ID::BUILD_PHOTONCANNON);
-	build_order.push_back(ABILITY_ID::BUILD_PHOTONCANNON);
-	build_order.push_back(ABILITY_ID::BUILD_PHOTONCANNON);
+	// build_order.push_back(ABILITY_ID::BUILD_PHOTONCANNON);
+	// build_order.push_back(ABILITY_ID::BUILD_PHOTONCANNON);
 	build_order.push_back(ABILITY_ID::BUILD_GATEWAY);
 	build_order.push_back(ABILITY_ID::BUILD_ASSIMILATOR);
 	build_order.push_back(ABILITY_ID::BUILD_ASSIMILATOR);
@@ -91,10 +94,10 @@ void bot_master::load_top_left() {
 	build_placement.push_back(Point2D(54, 163));
 	build_placement.push_back(Point2D(49, 160));
 	build_placement.push_back(Point2D(26, 164));
-	build_placement.push_back(Point2D(30, 161));
+	// build_placement.push_back(Point2D(30, 161));
 	build_placement.push_back(Point2D(54, 165));
-	build_placement.push_back(Point2D(25, 160));
-	build_placement.push_back(Point2D(30, 167));
+	// build_placement.push_back(Point2D(25, 160));
+	// build_placement.push_back(Point2D(30, 167));
 	build_placement.push_back(Point2D(49.5, 157.5));
 	build_placement.push_back(Point2D(36.5, 165.5));
 	build_placement.push_back(Point2D(26.5, 154.5));
@@ -118,10 +121,10 @@ void bot_master::load_top_right() {
 	build_placement.push_back(Point2D(163, 138));
 	build_placement.push_back(Point2D(160, 143));
 	build_placement.push_back(Point2D(166, 164));
-	build_placement.push_back(Point2D(162, 161));
+	// build_placement.push_back(Point2D(162, 161));
 	build_placement.push_back(Point2D(165, 138));
-	build_placement.push_back(Point2D(162, 166));
-	build_placement.push_back(Point2D(167, 161));
+	// build_placement.push_back(Point2D(162, 166));
+	// build_placement.push_back(Point2D(167, 161));
 	build_placement.push_back(Point2D(157.5, 142.5));
 	build_placement.push_back(Point2D(165.5, 154.5));
 	build_placement.push_back(Point2D(155.5, 165.5));
@@ -145,10 +148,10 @@ void bot_master::load_bottom_right() {
 	build_placement.push_back(Point2D(138, 29));
 	build_placement.push_back(Point2D(143, 32));
 	build_placement.push_back(Point2D(166, 28));
-	build_placement.push_back(Point2D(162, 31));
+	// build_placement.push_back(Point2D(162, 31));
 	build_placement.push_back(Point2D(138, 27));
-	build_placement.push_back(Point2D(167, 32));
-	build_placement.push_back(Point2D(163, 26));
+	// build_placement.push_back(Point2D(167, 32));
+	// build_placement.push_back(Point2D(163, 26));
 	build_placement.push_back(Point2D(145.5, 32.5));	
 	build_placement.push_back(Point2D(155.5, 26.5));
 	build_placement.push_back(Point2D(165.5, 37.5));
@@ -172,10 +175,10 @@ void bot_master::load_bottom_left() {
 	build_placement.push_back(Point2D(29, 54));
 	build_placement.push_back(Point2D(32, 49));
 	build_placement.push_back(Point2D(27, 27));
-	build_placement.push_back(Point2D(30, 31));
+	// build_placement.push_back(Point2D(30, 31));
 	build_placement.push_back(Point2D(27, 54));
-	build_placement.push_back(Point2D(32, 25));
-	build_placement.push_back(Point2D(24, 32));
+	// build_placement.push_back(Point2D(32, 25));
+	// build_placement.push_back(Point2D(24, 32));
 	build_placement.push_back(Point2D(34.5, 49.5));
 	build_placement.push_back(Point2D(26.5, 37.5));
 	build_placement.push_back(Point2D(36.5, 26.5));
@@ -215,4 +218,15 @@ void bot_master::load_expansions() {
 	expansions.push_back(Point2D(30, 67));
 	expansions.push_back(Point2D(33.5, 33.5));
 	expansions.push_back(Point2D(35, 93));
+}
+
+void bot_master::set_opp_position() {
+    // assumes the opp base has been found 
+    if (opp_base_found) {
+        // sort expansions vector according to their distance to opp_base 
+        selection_sort(expansions, opp_base);
+
+        // now set the warp location based on our opponent's start loc
+        warp_position = closest(warp_positions, opp_base);
+    }
 }

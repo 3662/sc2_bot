@@ -53,7 +53,7 @@ const Unit * bot_master::FindNearestMineralPatch(const Point2D &start) {
 void bot_master::selection_sort(std::vector<Point2D> &a, Point2D p) {
     // selection sort
 
-    int size = a.size(); // size of vector
+    size_t size = a.size(); // size of vector
 
     for (int i = 0; i < size; ++i) {
         int index = i;                             // index of closest point
@@ -74,4 +74,37 @@ void bot_master::selection_sort(std::vector<Point2D> &a, Point2D p) {
         std::cout << e.x << " " << e.y << " " << euclidean_dist(e, p) << std::endl;
     }   
 }
+
+const Unit * bot_master::random_probe() {
+    const Unit *unit_selected = nullptr;
+
+	Units units = observation->GetUnits(Unit::Alliance::Self);
+
+	// get random probe that has no orther other than mine
+	// ability_id for mining and bringing resources is 3666 and 3667
+	for (const auto &unit : units) {
+		// if probe, not a scout, not a gas worker and no orders then select this unit 
+		if (unit->unit_type == UNIT_TYPEID::PROTOSS_PROBE && !is_builder(unit) &&
+			!is_scout(unit) && gas_workers.find(unit) == gas_workers.end()) {
+			for (auto &order : unit->orders) {
+				// std::cout << order.ability_id << std::endl;
+				if (order.ability_id != 3666 && order.ability_id != 3667) {
+					// this means the probe is doing something other than 
+					// mining so do not select it
+					break;
+				} else {
+					unit_selected = unit;
+				}
+			}
+		} 
+	}
+    return unit_selected;
+}
+
+const bool bot_master::is_defender(const Unit *unit) {
+    // checks if unit is inside set "defenders"
+    return defenders.find(unit) != defenders.end();
+}
+
+
 
