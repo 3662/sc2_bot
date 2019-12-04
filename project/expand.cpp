@@ -1,5 +1,7 @@
 /*
-currently only handles selection of builder since we are not expanding
+Unfinished since expanding is not part of the game plan. However, it laid the 
+foundation to implement it. Currently selects a Probe scout and send it out to 
+the map.
 */
 
 #include "bot_master.h"

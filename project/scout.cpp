@@ -1,5 +1,5 @@
 /*
-functions that set a scout and send it to given locations on the map 
+Set up a scout Probe and sends it to scout a given location on the map.
 */
 
 #include "bot_master.h"

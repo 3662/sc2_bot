@@ -1,7 +1,8 @@
 /*
-mostly functions called when the game start
-they initialize variables, set relevant locations and load the build order with 
-their respective building placement 
+called from “OnGameStart()” from bot_master.cpp and helps set up all attributes 
+of the bot class including build order, building placement locations, our 
+initial starting location, potential opponent’s starting location etc. Build 
+order can be easily modified here. 
 */
 
 #include "bot_master.h"
@@ -48,21 +49,21 @@ void bot_master::set_variables() {
 	// set expansions
 	load_expansions();
 
-	index_build = 0;
-	index_pylon = 0;
-	index_patroll = 0;
-    scout_location = 0;
-	scout_unit = nullptr;
-	pylon_completed = false;
-	forge_completed = false;
-	gateway_completed = false;
-	core_completed = false;
+	index_build        = 0;
+	index_pylon        = 0;
+	index_patroll      = 0;
+    scout_location     = 0;
+	scout_unit         = nullptr;
+	pylon_completed    = false;
+	forge_completed    = false;
+	gateway_completed  = false;
+	core_completed     = false;
 	twilight_completed = false;
 	robotics_completed = false;
-    opp_base_found = false;
-	research_wrapgate = false;
-	warp_prism = false;
-	warp_ready = false;
+    opp_base_found     = false;
+	research_wrapgate  = false;
+	warp_prism         = false;
+	warp_ready         = false;
 }
 
 // load build order we are to execute
@@ -91,7 +92,6 @@ void bot_master::load_build_order() {
 	build_order.push_back(ABILITY_ID::BUILD_GATEWAY);
 	build_order.push_back(ABILITY_ID::BUILD_GATEWAY);
 	build_order.push_back(ABILITY_ID::BUILD_GATEWAY);
-	// build_order.push_back(ABILITY_ID::BUILD_GATEWAY);
 	build_order.push_back(ABILITY_ID::BUILD_PYLON);
 }
 
@@ -121,7 +121,6 @@ void bot_master::load_top_left() {
 	build_placement.push_back(Point2D(38.5, 154.5));
 	build_placement.push_back(Point2D(38.5, 151.5));
 	build_placement.push_back(Point2D(26.5, 166.5));
-	// build_placement.push_back(Point2D(23.5, 163.5));
 	build_placement.push_back(Point2D(48, 164));
 }
 
@@ -150,7 +149,6 @@ void bot_master::load_top_right() {
 	build_placement.push_back(Point2D(153.5, 148.5));
 	build_placement.push_back(Point2D(153.5, 151.5));
 	build_placement.push_back(Point2D(163.5, 145.5));
-	// build_placement.push_back(Point2D(164.5, 166.5));
 	build_placement.push_back(Point2D(166, 143));
 }
 
@@ -179,7 +177,6 @@ void bot_master::load_bottom_right() {
 	build_placement.push_back(Point2D(146.5, 38.5));
 	build_placement.push_back(Point2D(154.5, 37.5));
 	build_placement.push_back(Point2D(168.5, 29.5));
-	// build_placement.push_back(Point2D(165.5, 25.5));
 	build_placement.push_back(Point2D(144, 26));
 }
 
@@ -208,15 +205,16 @@ void bot_master::load_bottom_left() {
 	build_placement.push_back(Point2D(40.5, 40.5));
 	build_placement.push_back(Point2D(37.5, 46.5));
 	build_placement.push_back(Point2D(29.5, 24.5));
-	// build_placement.push_back(Point2D(24.5, 28.5));
 	build_placement.push_back(Point2D(28, 48));
 }
 
+// set locations of proxy pylons around the map
 void bot_master::load_proxy_pylons() {
 	proxy_pylons.push_back(Point2D(76, 70));
 	proxy_pylons.push_back(Point2D(76, 121));
 }
 
+// points indicating all possible expansions in the map
 void bot_master::load_expansions() {
 	expansions.push_back(Point2D(33.5, 158.5));
 	expansions.push_back(Point2D(66, 163));

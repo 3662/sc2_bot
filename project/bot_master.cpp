@@ -1,6 +1,11 @@
 /*
-implements virtual functions that handle game events such as "OnStep" and the 
-rest of the On... type functions we are going to use 
+Implements all virtual functions from “Agent” class that deal with game states, game 
+notifications, game steps, initializations, idle units etc. Its role is to 
+retrieve game information and decided what to do next accordingly. For example, 
+it calls functions from other modules to create the next building in the build 
+order and once a notification of building complete is read it “marks” that 
+specific building as completed (mainly used to know if pre-requisite for 
+creating units or buildings are meet).
 */
 
 #include "bot_master.h"

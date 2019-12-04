@@ -1,6 +1,7 @@
 /*
-simply creates an instance of our bot "bot_master" and set a match between it 
-and an AI opponent in map cactus valley
+Can be changed without modifying our bot. Its goal is to simply create an 
+instance of our class “bot_master” and set up and start a game between it and 
+an AI opponent. Parameters like opponent race or difficulty can be changed here.
 */
 
 #include <sc2api/sc2_api.h>

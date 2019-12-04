@@ -1,7 +1,10 @@
 /*
-contains functions that handle building, building placement and proximity 
-to pylons 
-also check pre-conditions 
+Contains functions that given a building type and a location in the map creates 
+that building. It is able to handle constrains such as buildings pre-requisites 
+(e.g. check if there is a Forge before building Photon Cannons), minerals/gas 
+costs as well as proximity to a Pylon and location availability (I.e. if the 
+building can be placed in that location). Mostly called from bot_master.cpp and 
+can be easily expanded to include constrains of buildings not in our build order.
 */
 
 #include "bot_master.h"

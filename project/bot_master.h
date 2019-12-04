@@ -179,6 +179,7 @@ private:
 	bool warp_ready;
 	bool warp_prism;
 
+	// some buildings used to research abilities or create core units
 	const Unit *cybernetics;
 	const Unit *robotics;
 };

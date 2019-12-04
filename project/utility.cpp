@@ -1,5 +1,8 @@
 /*
-various functions that deal with a variety of tasks  
+contains a variety of “helper” functions that are generic and independent of 
+our bot functionality. Other modules can call its functions to, for example, 
+sort a vector of points with respect to the distance to a given point, find the 
+closest location of an object and a vector of point, or retrieve a random probe. 
 */
 
 #include "bot_master.h"

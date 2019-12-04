@@ -1,6 +1,8 @@
 /*
-handles technology research
-currently only researching warp gate
+Contains functions that handle in-game upgrades (e.g. Warpgate). Given an 
+upgrade type start it. It checks constrains such as building requirements 
+(e.g. Cybernetics Core for Warpgate) and mineral/gas cost. Easily scalable by 
+adding more upgrade types and their respective constrain.
 */
 
 #include "bot_master.h"
