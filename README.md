@@ -9,18 +9,7 @@ Need to add the map Cactus Valley:
     the folder created.
 ```
 ## Bot strategy
-```
-This is one of the two bots we are going to implement
-
-One base Dark Templars:
-Out of one base and two vespene gases build 5-6 Gateways (to warp dark templars), 
-Robotics Facility (for a Warp Prism) and all neccesary tech (Twilight Council, 
-Dark Shrine and Cybernetics Core). Also build a Forge and some Photton Cannons 
-to defend early attacks.
-Send the Warp prism to our opponent's main base, warp Dark Templars and send them 
-to attack. 
-
-This is really effective if our opponent do not have some form of detection.
+```One base Dark Templar all-in
 ```
 
 ## Work so far:
