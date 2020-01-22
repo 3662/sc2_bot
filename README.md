@@ -9,7 +9,8 @@ Need to add the map Cactus Valley:
     the folder created.
 ```
 ## Bot strategy
-```One base Dark Templar all-in
+```
+One base Dark Templar all-in
 ```
 
 ## Work so far:
